@@ -1,5 +1,37 @@
 .menu-page {
     height: 100%;
     width: 100%;
-    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #BCD096;
+    color: black;
+}
+
+.menu-page-title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 3rem;
+}
+
+.menu-page-title h2 {
+    font-size: 54px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.menu-page-title h1 {
+    font-family: "Oooh Baby", cursive;
+    font-size: 80px;
+    margin: 0;
+}
+
+.menu-page-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
 }
