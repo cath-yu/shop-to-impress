@@ -29,5 +29,7 @@
 }
 
 :disabled {
+    background-color: #8e8e8e;
+    pointer-events: none;
     cursor: default;
 }

@@ -34,7 +34,7 @@ export default function HomePage() {
     // Move door by toggling CSS
     const handleDoor = (value) => {
         const slideDoor = document.getElementById(value);
-        slideDoor.classList.toggle('is-visible');
+        slideDoor.classList.toggle('open');
     }
 
     return (

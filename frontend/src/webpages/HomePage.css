@@ -31,8 +31,7 @@
     width: 14rem;
     object-fit: cover;
     object-position: left;
-    opacity: 0.6;
-    z-index: 0;
+    opacity: 0.9;
 }
 
 .home-page-wardrobe-right {
@@ -41,7 +40,7 @@
     width: 14rem;
     object-fit: cover;
     object-position: right;
-    opacity: 0.6;
+    opacity: 0.9;
 }
 
 .home-page-single-door {
@@ -51,12 +50,11 @@
     display: flex;
     align-items: center;
     background-color: #D7D7D7;
+    transition: transform 0.5s ease-out, opacity 0.8s ease-out;
     opacity: 1;
-    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
-    z-index: 1;
 }
 
-.home-page-single-door.is-visible {
+.home-page-single-door.open {
     height: 76vh;
     width: 14rem;
     display: flex;
@@ -64,7 +62,6 @@
     background-color: #D7D7D7;
     transform: translateX(-100%);
     opacity: 0;
-    z-index: 1;
 }
 
 .home-page-single-door-knob {
@@ -72,7 +69,6 @@
     width: 0.8rem;
     background-color: #5E8E3E;
     margin-left: 2rem;
-    z-index: 1;
 }
 
 .home-page-multi-door {
@@ -84,11 +80,10 @@
     align-items: center;
     background-color: #D7D7D7;
     opacity: 1;
-    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
-    z-index: 1;
+    transition: transform 0.5s ease-out, opacity 0.8s ease-out;
 }
 
-.home-page-multi-door.is-visible {
+.home-page-multi-door.open {
     height: 76vh;
     width: 14rem;
     display: flex;
@@ -96,7 +91,6 @@
     background-color: #D7D7D7;
     transform: translateX(100%);
     opacity: 0;
-    z-index: 1;
 }
 
 .home-page-multi-door-knob {
@@ -104,7 +98,6 @@
     width: 0.8rem;
     background-color: #5E8E3E;
     margin-right: 2rem;
-    z-index: 1;
 }
 
 .home-page-content {
@@ -116,12 +109,11 @@
     justify-content: left;
     align-items: left;
     text-align: left;
-    background-color: transparent;
     color: black;
     padding-top: 5rem;
     padding-left: 5rem;
-    gap: 5rem;
-    z-index: 5;
+    gap: 8rem;
+    z-index: 1;
 }
 
 .home-page-title {
@@ -139,7 +131,7 @@
     width: 46.5rem;
     font-family: "Oooh Baby", cursive;
     font-size: 150px;
-    background-color: #75A753;
+    background-color: #5E8E3E;
     margin: 0;
 }
 
