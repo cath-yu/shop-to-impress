@@ -1,3 +1,4 @@
+// CSS
 import './MultiPlayerPage.css';
 
 export default function MultiPlayerPage() {

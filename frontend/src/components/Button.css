@@ -12,7 +12,7 @@
 
 .primary {
     background-color: #5E8E3E;
-    color: white;
+    color: rgb(228, 228, 228);
 }
 
 .primary:hover {
@@ -21,7 +21,11 @@
 
 .secondary {
     background-color: #A5B49C;
-    color: #D9D9D9;
+    color: rgb(228, 228, 228);
+}
+
+.secondary:hover {
+    background-color: #8e9d86;
 }
 
 :disabled {

@@ -1,10 +1,10 @@
-.menu-page {
+.home-page {
     height: 100%;
     width: 100%;
     background-color: #BCD096;
 }
 
-.menu-page-background {
+.home-page-background {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -13,7 +13,7 @@
     align-items: center;
 }
 
-.menu-page-wardrobe {
+.home-page-wardrobe {
     height: 80vh;
     width: 30rem;
     display: flex;
@@ -25,7 +25,7 @@
     gap: 1rem;
 }
 
-.menu-page-wardrobe-left {
+.home-page-wardrobe-left {
     position: absolute;
     height: 76vh;
     width: 14rem;
@@ -35,7 +35,7 @@
     z-index: 0;
 }
 
-.menu-page-wardrobe-right {
+.home-page-wardrobe-right {
     position: absolute;
     height: 76vh;
     width: 14rem;
@@ -44,7 +44,7 @@
     opacity: 0.6;
 }
 
-.menu-page-single-door {
+.home-page-single-door {
     position: relative;
     height: 76vh;
     width: 14rem;
@@ -56,7 +56,7 @@
     z-index: 1;
 }
 
-.menu-page-single-door.is-visible {
+.home-page-single-door.is-visible {
     height: 76vh;
     width: 14rem;
     display: flex;
@@ -67,7 +67,7 @@
     z-index: 1;
 }
 
-.menu-page-single-door-knob {
+.home-page-single-door-knob {
     height: 3rem;
     width: 0.8rem;
     background-color: #5E8E3E;
@@ -75,7 +75,7 @@
     z-index: 1;
 }
 
-.menu-page-multi-door {
+.home-page-multi-door {
     position: relative;
     height: 76vh;
     width: 14rem;
@@ -88,7 +88,7 @@
     z-index: 1;
 }
 
-.menu-page-multi-door.is-visible {
+.home-page-multi-door.is-visible {
     height: 76vh;
     width: 14rem;
     display: flex;
@@ -99,7 +99,7 @@
     z-index: 1;
 }
 
-.menu-page-multi-door-knob {
+.home-page-multi-door-knob {
     height: 3rem;
     width: 0.8rem;
     background-color: #5E8E3E;
@@ -107,7 +107,7 @@
     z-index: 1;
 }
 
-.menu-page-content {
+.home-page-content {
     position: relative;
     height: 100%;
     width: 100%;
@@ -124,18 +124,18 @@
     z-index: 5;
 }
 
-.menu-page-title {
+.home-page-title {
     display: flex;
     flex-direction: column;
 }
 
-.menu-page-title h2 {
+.home-page-title h2 {
     font-size: 80px;
     font-weight: 400;
     margin: 0;
 }
 
-.menu-page-title h1 {
+.home-page-title h1 {
     width: 46.5rem;
     font-family: "Oooh Baby", cursive;
     font-size: 150px;
@@ -143,7 +143,7 @@
     margin: 0;
 }
 
-.menu-page-buttons {
+.home-page-buttons {
     width: 22rem;
     display: flex;
     flex-direction: column;
