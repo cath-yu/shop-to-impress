@@ -1,37 +1,152 @@
 .menu-page {
     height: 100%;
     width: 100%;
+    background-color: #BCD096;
+}
+
+.menu-page-background {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-page-wardrobe {
+    height: 80vh;
+    width: 30rem;
+    display: flex;
+    flex-direction: center;
+    align-items: center;
+    background-color: #A5B49C;
+    margin-left: 45rem;
+    padding-left: 1rem;
+    gap: 1rem;
+}
+
+.menu-page-wardrobe-left {
+    position: absolute;
+    height: 76vh;
+    width: 14rem;
+    object-fit: cover;
+    object-position: left;
+    opacity: 0.6;
+    z-index: 0;
+}
+
+.menu-page-wardrobe-right {
+    position: absolute;
+    height: 76vh;
+    width: 14rem;
+    object-fit: cover;
+    object-position: right;
+    opacity: 0.6;
+}
+
+.menu-page-single-door {
+    position: relative;
+    height: 76vh;
+    width: 14rem;
+    display: flex;
+    align-items: center;
+    background-color: #D7D7D7;
+    opacity: 1;
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+    z-index: 1;
+}
+
+.menu-page-single-door.is-visible {
+    height: 76vh;
+    width: 14rem;
+    display: flex;
+    align-items: center;
+    background-color: #D7D7D7;
+    transform: translateX(-100%);
+    opacity: 0;
+    z-index: 1;
+}
+
+.menu-page-single-door-knob {
+    height: 3rem;
+    width: 0.8rem;
+    background-color: #5E8E3E;
+    margin-left: 2rem;
+    z-index: 1;
+}
+
+.menu-page-multi-door {
+    position: relative;
+    height: 76vh;
+    width: 14rem;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    background-color: #D7D7D7;
+    opacity: 1;
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+    z-index: 1;
+}
+
+.menu-page-multi-door.is-visible {
+    height: 76vh;
+    width: 14rem;
+    display: flex;
+    align-items: center;
+    background-color: #D7D7D7;
+    transform: translateX(100%);
+    opacity: 0;
+    z-index: 1;
+}
+
+.menu-page-multi-door-knob {
+    height: 3rem;
+    width: 0.8rem;
+    background-color: #5E8E3E;
+    margin-right: 2rem;
+    z-index: 1;
+}
+
+.menu-page-content {
+    position: relative;
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    background-color: #BCD096;
+    justify-content: left;
+    align-items: left;
+    text-align: left;
+    background-color: transparent;
     color: black;
+    padding-top: 5rem;
+    padding-left: 5rem;
+    gap: 5rem;
+    z-index: 5;
 }
 
 .menu-page-title {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 3rem;
 }
 
 .menu-page-title h2 {
-    font-size: 54px;
-    font-weight: 500;
+    font-size: 80px;
+    font-weight: 400;
     margin: 0;
 }
 
 .menu-page-title h1 {
+    width: 46.5rem;
     font-family: "Oooh Baby", cursive;
-    font-size: 80px;
+    font-size: 150px;
+    background-color: #75A753;
     margin: 0;
 }
 
 .menu-page-buttons {
+    width: 22rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    align-items: left;
     gap: 1rem;
 }

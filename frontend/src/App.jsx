@@ -10,9 +10,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MenuPage />} />
-		<Route path="/singleplayer" element={<SinglePlayerPage />} />
-		<Route path="/multiplayer" element={<MultiPlayerPage />} />
-      </Routes>
+        <Route path="/singleplayer" element={<SinglePlayerPage />} />
+        <Route path="/multiplayer" element={<MultiPlayerPage />} />
+    </Routes>
     </BrowserRouter>
   );
 }
