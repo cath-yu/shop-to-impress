@@ -1,35 +1,16 @@
 .button {
     display: flex;
-    padding: 1rem 4rem;
+    padding: 1rem 3rem;
     justify-content: center;
     align-items: center;
     border-radius: 10px;
     border: none;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 500;
     cursor: pointer;
 }
 
 .primary {
     background-color: #5E8E3E;
-    color: rgb(228, 228, 228);
-}
-
-.primary:hover {
-    background-color: #75A753;
-}
-
-.secondary {
-    background-color: #A5B49C;
-    color: rgb(228, 228, 228);
-}
-
-.secondary:hover {
-    background-color: #8e9d86;
-}
-
-:disabled {
-    background-color: #8e8e8e;
-    pointer-events: none;
-    cursor: default;
+    color: white;
 }

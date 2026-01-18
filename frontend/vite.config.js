@@ -5,12 +5,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true,
-    allowedHosts: [
-      'shop2impress.tech'
-    ],
     proxy: {
       "/api": "http://localhost:5000",
     },
-  }
+  },
 })

@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import './SinglePlayerPage.css';
 import AvatarStage from "./AvatarStage";
-import ProductCard from '../components/ProductCard';
 
 export default function SinglePlayerPage() {
   const [items, setItems] = useState([]);
@@ -80,16 +79,6 @@ export default function SinglePlayerPage() {
   const overlayCategory = equippedItem?.category || "top";
   const isCurrentReady = current?.status === "ready";
 
-  const advanceCursor = () => {
-    setCursor((prev) => prev + 1);
-  };
-
-  useEffect(() => {
-    if (cursor >= queue.length) {
-      setCursor(Math.max(queue.length - 1, 0));
-    }
-  }, [queue.length, cursor]);
-
   const handleDiscard = () => {
     if (!current) return;
     setRenderError(null);
@@ -105,7 +94,6 @@ export default function SinglePlayerPage() {
     setEquippedId(current.id);
     setRenderError(null);
     if (current.renderedImages?.[avatar]) {
-      advanceCursor();
       return;
     }
     setRenderingId(current.id);
@@ -134,29 +122,17 @@ export default function SinglePlayerPage() {
     } finally {
       setRenderingId(null);
     }
-    setDismissedIds((prev) => [...prev, current.id]);
   };
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "ArrowLeft") {
-        handleDiscard();
-      }
-
-      if (e.key === "ArrowRight") {
-        handleWear();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleDiscard, handleWear]);
+  const handleNext = () => {
+    setRenderError(null);
+    setCursor((prev) => Math.min(prev + 1, Math.max(queue.length - 1, 0)));
+  };
 
   return (
     <div className="singleplayer-page">
       <div className="page-header">
-        <h1>Shop to Impress</h1>
+        <h1>Dress to Impress</h1>
         <div className="avatar-toggle">
           <button
             type="button"
@@ -174,7 +150,6 @@ export default function SinglePlayerPage() {
           </button>
         </div>
       </div>
-
       <div className="singleplayer-layout">
         <AvatarStage
           base={avatar}
@@ -182,19 +157,7 @@ export default function SinglePlayerPage() {
           overlayCategory={overlayCategory}
           renderUrl={renderUrl}
         />
-
-        <div className="singleplayer-page-cards">
-          {current ? <ProductCard
-            name={current.name}
-            store={current.productUrl}
-            image={current.previewImage || current.imageUrl}
-            onDislike={handleDiscard}
-            onLike={handleWear}
-          /> : 
-          <p className="empty-state">No more items.</p>}
-      </div>
-
-        {/* <div className="product-card">
+        <div className="product-card">
           <div className="product-header">
             <span className="product-status">
               {status === "loading" && "Loading products..."}
@@ -240,8 +203,7 @@ export default function SinglePlayerPage() {
           ) : (
             <p className="empty-state">No items loaded yet.</p>
           )}
-        </div> */}
-
+        </div>
       </div>
     </div>
   );
