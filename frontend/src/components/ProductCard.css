@@ -1,0 +1,50 @@
+.product-card {
+    height: 32rem;
+    width: 27rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #D7D7D7;
+}
+
+.product-card-image {
+    height: 25rem;
+    width: 25rem;
+    object-fit: cover;
+    object-position: center;
+}
+
+.product-card-text {
+    width: 25rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.product-card-text h3 {
+    margin: 0;
+}
+
+.product-card-store h4 {
+    width: 25rem;
+    font-weight: 400;
+    margin: 0;
+}
+
+.product-card-heart-right {
+    width: 25rem;
+    display: flex;
+    justify-content: end;
+}
+
+.product-card-heart-left {
+    width: 25rem;
+    display: flex;
+    justify-content: start;
+}
+
+.product-card-heart {
+    height: 2rem;
+    width: 2rem;
+    cursor: pointer;
+}
