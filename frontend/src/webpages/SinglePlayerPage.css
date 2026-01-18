@@ -1,8 +1,194 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap");
+
 .singleplayer-page {
     height: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
-    background-color: white;
+    background: linear-gradient(180deg, #f7f2ec 0%, #ffffff 45%, #f3f3f3 100%);
     color: black;
+    padding: 24px;
+    gap: 16px;
+    font-family: "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.avatar-toggle {
+    display: flex;
+    gap: 8px;
+}
+
+.avatar-toggle button {
+    border: 1px solid #cfcfcf;
+    border-radius: 999px;
+    padding: 6px 14px;
+    background: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.avatar-toggle button.active {
+    background: #111111;
+    color: #ffffff;
+    border-color: #111111;
+}
+
+.singleplayer-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 24px;
+    align-items: start;
+}
+
+.avatar-stage {
+    position: relative;
+    width: 100%;
+    min-height: 520px;
+    background: radial-gradient(circle at top, #f0e8dd 0%, #f3f3f3 45%, #ededed 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid #e6e6e6;
+}
+
+.avatar-base {
+    width: 65%;
+    max-width: 360px;
+    height: auto;
+}
+
+.avatar-render {
+    width: 70%;
+    max-width: 420px;
+    height: auto;
+}
+
+.avatar-overlay {
+    position: absolute;
+    transform: translate(-50%, -10%);
+    filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.15));
+}
+
+.ui-overlay {
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px;
+}
+
+.product-card {
+    width: 280px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.product-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-status {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #666666;
+}
+
+.product-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    background: #f2f2f2;
+}
+
+.product-info h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.product-info p {
+    margin: 4px 0 8px;
+    color: #555555;
+}
+
+.product-info a {
+    color: #111111;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.product-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.product-actions button {
+    flex: 1;
+    border-radius: 999px;
+    border: none;
+    padding: 10px 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.product-actions button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.product-actions .ghost {
+    background: #f2f2f2;
+    color: #111111;
+}
+
+.product-actions button:not(.ghost) {
+    background: #111111;
+    color: #ffffff;
+}
+
+.next-button {
+    border: none;
+    background: transparent;
+    color: #111111;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+}
+
+.next-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.empty-state {
+    color: #777777;
+}
+
+@media (max-width: 900px) {
+    .singleplayer-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .ui-overlay {
+        justify-content: center;
+    }
+
+    .product-card {
+        width: 100%;
+        max-width: 360px;
+    }
 }
