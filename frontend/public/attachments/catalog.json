@@ -1,0 +1,38 @@
+[
+  {
+    "id": "shop_fd06056df088",
+    "name": "Dear Person Behind Me (You are enough) Hoodie",
+    "store": "shop.app",
+    "productUrl": "https://shop.app/products/9745391714586/dear-person-behind-me-you-are-enough-hoodie",
+    "imageUrl": "https://cdn.shopify.com/s/files/1/0858/2060/4698/files/YAE_BLACK.webp?v=1736493993&width=384",
+    "category": "top",
+    "status": "ready",
+    "previewImage": "/uploads/shop_fd06056df088.webp",
+    "renderStatus": {
+      "girl": "ready"
+    },
+    "renderedImages": {
+      "girl": "/renders/shop_fd06056df088_girl.png"
+    }
+  },
+  {
+    "id": "shop_cf9787ecc894",
+    "name": "Amos Heather Grey Graphic Hoodie",
+    "store": "shop.app",
+    "productUrl": "https://shop.app/products/7931165016199/amos-heather-grey-graphic-hoodie",
+    "imageUrl": "https://cdn.shopify.com/s/files/1/1238/9850/files/01_66398309-315b-4283-b2b5-cecebc3b32c9.webp?v=1732335958&width=384",
+    "category": "top",
+    "status": "ready",
+    "previewImage": "/uploads/shop_cf9787ecc894.webp"
+  },
+  {
+    "id": "shop_b8d621168b63",
+    "name": "Signature Hoodie - Black",
+    "store": "shop.app",
+    "productUrl": "https://shop.app/products/7634204721217/signature-hoodie-black",
+    "imageUrl": "https://cdn.shopify.com/s/files/1/0973/7782/files/M-0425-KT-6048_BLACK2084.jpg?v=1756152796&width=384",
+    "category": "top",
+    "status": "ready",
+    "previewImage": "/uploads/shop_b8d621168b63.jpg"
+  }
+]

@@ -8,6 +8,9 @@ export default defineConfig({
     host: true,
     allowedHosts: [
       'shop2impress.tech'
-    ]
+    ],
+    proxy: {
+      "/api": "http://localhost:5000",
+    },
   }
 })
