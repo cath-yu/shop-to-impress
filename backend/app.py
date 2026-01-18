@@ -3,7 +3,9 @@ import hashlib
 import io
 import json
 import os
+import secrets
 import threading
+import time
 from urllib.parse import quote_plus, urlparse
 
 import requests
@@ -14,6 +16,8 @@ from flask import Flask, jsonify, request
 
 APP = Flask(__name__)
 LOCK = threading.Lock()
+GAME_LOCK = threading.Lock()
+GAMES = {}
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 ATTACHMENTS_DIR = os.path.join(ROOT_DIR, "frontend", "public", "attachments")
@@ -84,6 +88,43 @@ SHOP_SEARCH_TIMEOUT = _safe_int(os.environ.get("SHOP_SEARCH_TIMEOUT"), 20)
 SHOP_SEARCH_LIMIT = _safe_int(os.environ.get("SHOP_SEARCH_LIMIT"), 6)
 SHOP_USE_PLAYWRIGHT = os.environ.get("SHOP_USE_PLAYWRIGHT", "1") == "1"
 SHOP_PLAYWRIGHT_TIMEOUT = _safe_int(os.environ.get("SHOP_PLAYWRIGHT_TIMEOUT"), 25)
+GAME_DEFAULT_DURATION = _safe_int(os.environ.get("MULTI_DURATION_SECONDS"), 90)
+GAME_DEFAULT_LIMIT = _safe_int(os.environ.get("MULTI_ITEM_LIMIT"), 6)
+GAME_TTL_SECONDS = _safe_int(os.environ.get("MULTI_GAME_TTL_SECONDS"), 60 * 60)
+GAME_MAX_PLAYERS = _safe_int(os.environ.get("MULTI_MAX_PLAYERS"), 6)
+
+PROMPT_PRESETS = [
+    {
+        "id": "summer",
+        "label": "Summer Outfit",
+        "queries": ["summer outfit", "linen shirt", "sundress", "shorts"],
+        "categories": [
+            {"id": "dress", "label": "Dresses", "query": "summer dress"},
+            {"id": "shoes", "label": "Shoes", "query": "sandals"},
+            {"id": "accessory", "label": "Accessories", "query": "sun hat"},
+        ],
+    },
+    {
+        "id": "fall",
+        "label": "Fall Breeze",
+        "queries": ["fall outfit", "light jacket", "hoodie", "sweater"],
+        "categories": [
+            {"id": "outerwear", "label": "Outerwear", "query": "fall jacket"},
+            {"id": "shoes", "label": "Shoes", "query": "boots"},
+            {"id": "accessory", "label": "Accessories", "query": "scarf"},
+        ],
+    },
+    {
+        "id": "school",
+        "label": "High School",
+        "queries": ["school outfit", "graphic tee", "hoodie", "sneakers"],
+        "categories": [
+            {"id": "top", "label": "Tops", "query": "hoodie"},
+            {"id": "shoes", "label": "Shoes", "query": "sneakers"},
+            {"id": "accessory", "label": "Accessories", "query": "backpack"},
+        ],
+    },
+]
 
 BOTTOM_KEYWORDS = [
     "pants",
@@ -252,6 +293,8 @@ def _parse_shop_search_html(html):
 
 
 def _candidate_to_item(candidate):
+    if not isinstance(candidate, dict):
+        return None
     title = candidate.get("title") or candidate.get("name")
     image_url = _extract_candidate_image_url(candidate)
     if not title or not image_url:
@@ -542,6 +585,7 @@ def _prepare_reference_images(avatar_path, item_source):
 
 def _compose_reference_pair(avatar_path, item_source):
     avatar, item = _prepare_reference_images(avatar_path, item_source)
+    target_height = avatar.height
 
     total_width = avatar.width + RENDER_REF_GAP + item.width
     composite = Image.new("RGBA", (total_width, target_height), (255, 255, 255, 255))
@@ -560,8 +604,8 @@ def _get_avatar_path(avatar):
     return avatar_path
 
 
-def _render_item_on_avatar(item, avatar):
-    base_path = _get_avatar_path(avatar)
+def _render_item_on_avatar(item, avatar, base_image=None):
+    base_path = base_image or _get_avatar_path(avatar)
     overlay_source = item.get("previewImage") or item.get("imageUrl")
     if not overlay_source:
         raise RuntimeError("Item is missing image data.")
@@ -674,6 +718,159 @@ def _generate_items(items):
         _update_catalog(items)
 
 
+def _make_token(length=8):
+    token = secrets.token_urlsafe(12).replace("-", "").replace("_", "")
+    return token[:length].lower()
+
+
+def _make_game_id():
+    return _make_token(6)
+
+
+def _make_player_id():
+    return _make_token(10)
+
+
+def _find_prompt(prompt_id=None, prompt_label=None):
+    if prompt_id:
+        for prompt in PROMPT_PRESETS:
+            if prompt["id"] == prompt_id:
+                return prompt
+    if prompt_label:
+        lowered = prompt_label.strip().lower()
+        for prompt in PROMPT_PRESETS:
+            if prompt["label"].lower() == lowered:
+                return prompt
+    return None
+
+
+def _choose_prompt(prompt_id=None, prompt_label=None):
+    prompt = _find_prompt(prompt_id, prompt_label)
+    if prompt:
+        return prompt
+    return secrets.choice(PROMPT_PRESETS)
+
+
+def _prompt_query(prompt):
+    queries = prompt.get("queries") or []
+    if queries:
+        return secrets.choice(queries)
+    return prompt.get("label", SHOP_SEARCH_QUERY)
+
+
+def _collect_prompt_items(prompt, per_category=3):
+    categories = prompt.get("categories") or []
+    if not categories:
+        return []
+    items = []
+    seen = set()
+    for category in categories:
+        query = category.get("query") or category.get("label") or prompt.get("label")
+        target = _safe_int(category.get("count"), per_category)
+        if not query or target <= 0:
+            continue
+        batch = _search_shop_products(query, target)
+        for item in batch:
+            key = item.get("imageUrl")
+            if not key or key in seen:
+                continue
+            seen.add(key)
+            item["category"] = category.get("id") or item.get("category")
+            items.append(item)
+    return items
+
+
+def _cleanup_games():
+    cutoff = time.time() - GAME_TTL_SECONDS
+    with GAME_LOCK:
+        for game_id, game in list(GAMES.items()):
+            updated = game.get("updatedAt", game.get("createdAt", 0))
+            if updated < cutoff:
+                del GAMES[game_id]
+
+
+def _touch_game(game):
+    game["updatedAt"] = time.time()
+
+
+def _public_player(player):
+    return {
+        "id": player["id"],
+        "name": player.get("name"),
+        "avatar": player.get("avatar"),
+        "pickedItemId": player.get("pickedItemId"),
+        "renderedImage": player.get("renderedImage"),
+    }
+
+
+def _compute_game_phase(game):
+    now = time.time()
+    phase = "waiting"
+    time_remaining = None
+
+    if game.get("startTime") is not None:
+        end_time = game["startTime"] + game["durationSeconds"]
+        time_remaining = max(0, int(end_time - now))
+        phase = "draft" if now < end_time else "vote"
+
+    if phase == "vote":
+        votes = game.get("votes", {})
+        players = list(game["players"].values())
+        if players and len(votes) >= len(players):
+            phase = "done"
+
+    game["phase"] = phase
+    return phase, time_remaining
+
+
+def _compute_winner(game, phase):
+    if phase != "done":
+        return game.get("winner"), game.get("tie", False)
+
+    votes = game.get("votes", {})
+    tally = {player_id: 0 for player_id in game["players"].keys()}
+    for target in votes.values():
+        if target in tally:
+            tally[target] += 1
+
+    if not tally:
+        game["winner"] = None
+        game["tie"] = True
+        return None, True
+
+    max_votes = max(tally.values())
+    winners = [player_id for player_id, count in tally.items() if count == max_votes]
+    if len(winners) == 1:
+        game["winner"] = winners[0]
+        game["tie"] = False
+    else:
+        game["winner"] = None
+        game["tie"] = True
+    return game["winner"], game["tie"]
+
+
+def _serialize_game(game):
+    phase, time_remaining = _compute_game_phase(game)
+    winner, tie = _compute_winner(game, phase)
+    players = [_public_player(player) for player in game["players"].values()]
+
+    return {
+        "gameId": game["id"],
+        "prompt": game.get("prompt"),
+        "promptId": game.get("promptId"),
+        "hostId": game.get("hostId"),
+        "maxPlayers": game.get("maxPlayers"),
+        "phase": phase,
+        "durationSeconds": game["durationSeconds"],
+        "timeRemaining": time_remaining,
+        "items": game.get("items", []),
+        "players": players,
+        "votes": game.get("votes", {}),
+        "winner": winner,
+        "tie": tie,
+    }
+
+
 @APP.route("/api/preload", methods=["GET", "POST"])
 def preload_items():
     limit = int(request.args.get("limit", str(SHOP_SEARCH_LIMIT)))
@@ -707,6 +904,7 @@ def render_item():
     payload = request.get_json(silent=True) or {}
     item_id = payload.get("itemId")
     avatar = payload.get("avatar", "girl")
+    base_image = payload.get("baseImage") or payload.get("baseImageUrl")
 
     if not item_id:
         return jsonify({"error": "Missing itemId."}), 400
@@ -720,20 +918,223 @@ def render_item():
     if item.get("status") != "ready":
         return jsonify({"error": "Item not ready."}), 409
 
-    existing = (item.get("renderedImages") or {}).get(avatar)
-    if existing:
-        local_path = _public_to_local_path(existing)
-        if local_path and os.path.isfile(local_path):
-            return jsonify({"itemId": item_id, "renderedImage": existing})
+    if not base_image:
+        existing = (item.get("renderedImages") or {}).get(avatar)
+        if existing:
+            local_path = _public_to_local_path(existing)
+            if local_path and os.path.isfile(local_path):
+                return jsonify({"itemId": item_id, "renderedImage": existing})
 
     try:
-        _update_render_state(item_id, avatar, "generating")
-        rendered_url = _render_item_on_avatar(item, avatar)
-        _update_render_state(item_id, avatar, "ready", rendered_url=rendered_url)
+        if not base_image:
+            _update_render_state(item_id, avatar, "generating")
+        rendered_url = _render_item_on_avatar(item, avatar, base_image=base_image)
+        if not base_image:
+            _update_render_state(item_id, avatar, "ready", rendered_url=rendered_url)
         return jsonify({"itemId": item_id, "renderedImage": rendered_url})
     except Exception as exc:
-        _update_render_state(item_id, avatar, "error", error=str(exc))
+        if not base_image:
+            _update_render_state(item_id, avatar, "error", error=str(exc))
         return jsonify({"error": str(exc)}), 500
+
+
+@APP.post("/api/multiplayer/create")
+def multiplayer_create():
+    _cleanup_games()
+    payload = request.get_json(silent=True) or {}
+    prompt_id = payload.get("promptId")
+    prompt_label = payload.get("prompt")
+    prompt = _choose_prompt(prompt_id, prompt_label)
+    query = payload.get("query") or request.args.get("q") or _prompt_query(prompt)
+    limit = _safe_int(payload.get("limit"), GAME_DEFAULT_LIMIT)
+    per_category = _safe_int(payload.get("perCategory"), 3)
+    duration = _safe_int(payload.get("durationSeconds"), GAME_DEFAULT_DURATION)
+    avatar = payload.get("avatar", "girl")
+    name = (payload.get("name") or "Player 1").strip() or "Player 1"
+
+    if avatar not in ALLOWED_AVATARS:
+        return jsonify({"error": "Invalid avatar."}), 400
+
+    try:
+        items = _collect_prompt_items(prompt, per_category=per_category)
+        if not items:
+            items = _search_shop_products(query, limit)
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 500
+    if not items:
+        return jsonify({"error": "No items found."}), 404
+
+    for item in items:
+        item["status"] = "ready"
+
+    _update_catalog(items)
+
+    game_id = _make_game_id()
+    player_id = _make_player_id()
+    now = time.time()
+    game = {
+        "id": game_id,
+        "createdAt": now,
+        "updatedAt": now,
+        "durationSeconds": duration,
+        "startTime": None,
+        "prompt": prompt["label"],
+        "promptId": prompt["id"],
+        "maxPlayers": max(2, GAME_MAX_PLAYERS),
+        "hostId": player_id,
+        "items": items,
+        "players": {
+            player_id: {
+                "id": player_id,
+                "name": name,
+                "avatar": avatar,
+                "joinedAt": now,
+            }
+        },
+        "votes": {},
+        "phase": "waiting",
+    }
+
+    with GAME_LOCK:
+        GAMES[game_id] = game
+        state = _serialize_game(game)
+
+    return jsonify({"gameId": game_id, "playerId": player_id, "state": state})
+
+
+@APP.post("/api/multiplayer/join")
+def multiplayer_join():
+    _cleanup_games()
+    payload = request.get_json(silent=True) or {}
+    game_id = payload.get("gameId") or request.args.get("gameId")
+    avatar = payload.get("avatar", "girl")
+    name = (payload.get("name") or "").strip()
+
+    if not game_id:
+        return jsonify({"error": "Missing gameId."}), 400
+    if avatar not in ALLOWED_AVATARS:
+        return jsonify({"error": "Invalid avatar."}), 400
+
+    with GAME_LOCK:
+        game = GAMES.get(game_id)
+        if not game:
+            return jsonify({"error": "Game not found."}), 404
+        if len(game["players"]) >= game.get("maxPlayers", GAME_MAX_PLAYERS):
+            return jsonify({"error": "Game is full."}), 409
+
+        player_id = _make_player_id()
+        if not name:
+            name = f"Player {len(game['players']) + 1}"
+
+        game["players"][player_id] = {
+            "id": player_id,
+            "name": name,
+            "avatar": avatar,
+            "joinedAt": time.time(),
+        }
+        _touch_game(game)
+        state = _serialize_game(game)
+
+    return jsonify({"gameId": game_id, "playerId": player_id, "state": state})
+
+
+@APP.get("/api/multiplayer/state")
+def multiplayer_state():
+    game_id = request.args.get("gameId")
+    if not game_id:
+        return jsonify({"error": "Missing gameId."}), 400
+
+    with GAME_LOCK:
+        game = GAMES.get(game_id)
+        if not game:
+            return jsonify({"error": "Game not found."}), 404
+        _touch_game(game)
+        state = _serialize_game(game)
+
+    return jsonify(state)
+
+
+@APP.post("/api/multiplayer/start")
+def multiplayer_start():
+    payload = request.get_json(silent=True) or {}
+    game_id = payload.get("gameId")
+    player_id = payload.get("playerId")
+
+    if not game_id or not player_id:
+        return jsonify({"error": "Missing gameId or playerId."}), 400
+
+    with GAME_LOCK:
+        game = GAMES.get(game_id)
+        if not game:
+            return jsonify({"error": "Game not found."}), 404
+        if game.get("hostId") != player_id:
+            return jsonify({"error": "Only the host can start."}), 403
+        if len(game["players"]) < 2:
+            return jsonify({"error": "Need at least 2 players to start."}), 409
+        if game.get("startTime") is None:
+            game["startTime"] = time.time()
+        _touch_game(game)
+        state = _serialize_game(game)
+
+    return jsonify(state)
+
+
+@APP.post("/api/multiplayer/pick")
+def multiplayer_pick():
+    payload = request.get_json(silent=True) or {}
+    game_id = payload.get("gameId")
+    player_id = payload.get("playerId")
+    item_id = payload.get("itemId")
+    rendered_image = payload.get("renderedImage")
+
+    if not game_id or not player_id or not item_id:
+        return jsonify({"error": "Missing gameId, playerId, or itemId."}), 400
+
+    with GAME_LOCK:
+        game = GAMES.get(game_id)
+        if not game:
+            return jsonify({"error": "Game not found."}), 404
+        player = game["players"].get(player_id)
+        if not player:
+            return jsonify({"error": "Player not found."}), 404
+        if item_id not in {item["id"] for item in game.get("items", [])}:
+            return jsonify({"error": "Invalid itemId."}), 400
+
+        player["pickedItemId"] = item_id
+        if rendered_image:
+            player["renderedImage"] = rendered_image
+        _touch_game(game)
+        state = _serialize_game(game)
+
+    return jsonify(state)
+
+
+@APP.post("/api/multiplayer/vote")
+def multiplayer_vote():
+    payload = request.get_json(silent=True) or {}
+    game_id = payload.get("gameId")
+    player_id = payload.get("playerId")
+    vote_for = payload.get("voteFor")
+
+    if not game_id or not player_id or not vote_for:
+        return jsonify({"error": "Missing gameId, playerId, or voteFor."}), 400
+
+    with GAME_LOCK:
+        game = GAMES.get(game_id)
+        if not game:
+            return jsonify({"error": "Game not found."}), 404
+        if player_id not in game["players"]:
+            return jsonify({"error": "Player not found."}), 404
+        if vote_for not in game["players"]:
+            return jsonify({"error": "Invalid vote target."}), 400
+        if player_id == vote_for:
+            return jsonify({"error": "Cannot vote for yourself."}), 400
+
+        game.setdefault("votes", {})[player_id] = vote_for
+        _touch_game(game)
+        state = _serialize_game(game)
+
+    return jsonify(state)
 
 
 if __name__ == "__main__":
