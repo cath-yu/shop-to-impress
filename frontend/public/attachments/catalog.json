@@ -1,38 +1,95 @@
 [
   {
-    "id": "shop_fd06056df088",
-    "name": "Dear Person Behind Me (You are enough) Hoodie",
+    "id": "shop_4bafa2a17e2f",
+    "name": "Summer Romance Mini Dress - White",
     "store": "shop.app",
-    "productUrl": "https://shop.app/products/9745391714586/dear-person-behind-me-you-are-enough-hoodie",
-    "imageUrl": "https://cdn.shopify.com/s/files/1/0858/2060/4698/files/YAE_BLACK.webp?v=1736493993&width=384",
-    "category": "top",
+    "productUrl": "https://shop.app/products/6541114867836/summer-romance-mini-dress-white",
+    "imageUrl": "https://cdn.shopify.com/s/files/1/0293/9277/files/6-20-2024__124_Summer_Romance_Mini_Dress_White_GF.jpg?v=1722552183&width=384",
+    "category": "dress",
     "status": "ready",
-    "previewImage": "/uploads/shop_fd06056df088.webp",
     "renderStatus": {
       "girl": "ready"
     },
     "renderedImages": {
-      "girl": "/renders/shop_fd06056df088_girl.png"
+      "girl": "/renders/shop_4bafa2a17e2f_girl.png"
     }
   },
   {
-    "id": "shop_cf9787ecc894",
-    "name": "Amos Heather Grey Graphic Hoodie",
+    "id": "shop_45e19f843053",
+    "name": "Kaia Maxi Sunburst featuring vibrant orange and yellow boho style pattern",
     "store": "shop.app",
-    "productUrl": "https://shop.app/products/7931165016199/amos-heather-grey-graphic-hoodie",
-    "imageUrl": "https://cdn.shopify.com/s/files/1/1238/9850/files/01_66398309-315b-4283-b2b5-cecebc3b32c9.webp?v=1732335958&width=384",
-    "category": "top",
-    "status": "ready",
-    "previewImage": "/uploads/shop_cf9787ecc894.webp"
+    "productUrl": "https://shop.app/products/7888531816537/kaia-maxi-sunburst",
+    "imageUrl": "https://cdn.shopify.com/s/files/1/0778/7241/files/Kaia_Maxi_Sunburst_2.jpg?v=1766685315&width=384",
+    "category": "dress",
+    "status": "ready"
   },
   {
-    "id": "shop_b8d621168b63",
-    "name": "Signature Hoodie - Black",
+    "id": "shop_1abd1b31c37d",
+    "name": "product Princess Polly Square Neck  Summer Nights Mini Dress Blue Floral",
     "store": "shop.app",
-    "productUrl": "https://shop.app/products/7634204721217/signature-hoodie-black",
-    "imageUrl": "https://cdn.shopify.com/s/files/1/0973/7782/files/M-0425-KT-6048_BLACK2084.jpg?v=1756152796&width=384",
-    "category": "top",
+    "productUrl": "https://shop.app/products/6720649789524/summer-nights-mini-dress-blue-floral",
+    "imageUrl": "https://cdn.shopify.com/s/files/1/0061/8627/0804/products/0-modelinfo-Alexis-us2_4321947f-fe57-4a57-9f24-c055212493f1.jpg?v=1728584763&width=384",
+    "category": "dress",
+    "status": "ready"
+  },
+  {
+    "id": "shop_f5362378218f",
+    "name": "Ma Belle Sandals Cream",
+    "store": "shop.app",
+    "productUrl": "https://shop.app/products/6596644667464/ma-belle-sandals-cream",
+    "imageUrl": "https://cdn.shopify.com/s/files/1/0076/6040/4818/files/0_5a11e241-0a4a-4d4b-ba52-bab34650c83d.jpg?v=1762140111&width=384",
+    "category": "shoes",
+    "status": "ready"
+  },
+  {
+    "id": "shop_cc4e5191e970",
+    "name": "Agnes Flat Sandals - Black",
+    "store": "shop.app",
+    "productUrl": "https://shop.app/products/6539158716540/agnes-flat-sandals-black",
+    "imageUrl": "https://cdn.shopify.com/s/files/1/0293/9277/files/05-11-23Studio8_CB_RS_1-36PM_52_VALERIEC_Black_3510_PXF.jpg?v=1725506220&width=384",
+    "category": "shoes",
+    "status": "ready"
+  },
+  {
+    "id": "shop_433e27ee1877",
+    "name": "Nobody But Me Sandals - White",
+    "store": "shop.app",
+    "productUrl": "https://shop.app/products/1321227059324/nobody-but-me-sandals-white",
+    "imageUrl": "https://cdn.shopify.com/s/files/1/0293/9277/products/05-07-20Studio3_MA_CP_15-10-45_97_JELLI71_White_0743_WG.jpg?v=1725500318&width=384",
+    "category": "shoes",
     "status": "ready",
-    "previewImage": "/uploads/shop_b8d621168b63.jpg"
+    "renderStatus": {
+      "boy": "ready"
+    },
+    "renderedImages": {
+      "boy": "/renders/shop_433e27ee1877_boy.png"
+    }
+  },
+  {
+    "id": "shop_c2e768fa6b28",
+    "name": "Satin-Lined, Waterproof Sun Hat",
+    "store": "shop.app",
+    "productUrl": "https://shop.app/products/7576398135356/satin-lined-waterproof-sun-hat",
+    "imageUrl": "https://cdn.shopify.com/s/files/1/1457/3398/files/Sun_Hat_Product_Details.png?v=1745515638&width=384",
+    "category": "accessory",
+    "status": "ready"
+  },
+  {
+    "id": "shop_41214e314148",
+    "name": "Sand | .p",
+    "store": "shop.app",
+    "productUrl": "https://shop.app/products/8446472585537/womens-oasis-sun-hat",
+    "imageUrl": "https://cdn.shopify.com/s/files/1/0741/3602/7457/files/2643880910.png?v=1755548331&width=384",
+    "category": "accessory",
+    "status": "ready"
+  },
+  {
+    "id": "shop_d57cd8e3aafd",
+    "name": "Will & Bear Wide Brim Straw Hat \u2013 Sawyer Sand \u2013 front angle showcasing lightweight natural straw and classic crown shape, displayed on a neutral background.",
+    "store": "shop.app",
+    "productUrl": "https://shop.app/products/7302466240600/sawyer-sand-wide-brim-straw-hat",
+    "imageUrl": "https://cdn.shopify.com/s/files/1/1890/6261/products/will-and-bear-wide-brim-straw-hat-sawyer-sand-front-angle.jpg?v=1751934966&width=384",
+    "category": "accessory",
+    "status": "ready"
   }
 ]
