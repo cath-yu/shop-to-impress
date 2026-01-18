@@ -1,0 +1,144 @@
+.home-page {
+    height: 100%;
+    width: 100%;
+    background-color: #BCD096;
+}
+
+.home-page-background {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-page-wardrobe {
+    height: 80vh;
+    width: 30rem;
+    display: flex;
+    flex-direction: center;
+    align-items: center;
+    background-color: #A5B49C;
+    margin-left: 45rem;
+    padding-left: 1rem;
+    gap: 1rem;
+}
+
+.home-page-wardrobe-left {
+    position: absolute;
+    height: 76vh;
+    width: 14rem;
+    object-fit: cover;
+    object-position: left;
+    opacity: 0.9;
+}
+
+.home-page-wardrobe-right {
+    position: absolute;
+    height: 76vh;
+    width: 14rem;
+    object-fit: cover;
+    object-position: right;
+    opacity: 0.9;
+}
+
+.home-page-single-door {
+    position: relative;
+    height: 76vh;
+    width: 14rem;
+    display: flex;
+    align-items: center;
+    background-color: #D7D7D7;
+    transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+    opacity: 1;
+}
+
+.home-page-single-door.open {
+    height: 76vh;
+    width: 14rem;
+    display: flex;
+    align-items: center;
+    background-color: #D7D7D7;
+    transform: translateX(-100%);
+    opacity: 0;
+}
+
+.home-page-single-door-knob {
+    height: 3rem;
+    width: 0.8rem;
+    background-color: #5E8E3E;
+    margin-left: 2rem;
+}
+
+.home-page-multi-door {
+    position: relative;
+    height: 76vh;
+    width: 14rem;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    background-color: #D7D7D7;
+    opacity: 1;
+    transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+.home-page-multi-door.open {
+    height: 76vh;
+    width: 14rem;
+    display: flex;
+    align-items: center;
+    background-color: #D7D7D7;
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.home-page-multi-door-knob {
+    height: 3rem;
+    width: 0.8rem;
+    background-color: #5E8E3E;
+    margin-right: 2rem;
+}
+
+.home-page-content {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: left;
+    text-align: left;
+    color: black;
+    padding-top: 5rem;
+    padding-left: 5rem;
+    gap: 8rem;
+    z-index: 1;
+}
+
+.home-page-title {
+    display: flex;
+    flex-direction: column;
+}
+
+.home-page-title h2 {
+    font-size: 80px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.home-page-title h1 {
+    width: 46.5rem;
+    font-family: "Oooh Baby", cursive;
+    font-size: 150px;
+    background-color: #5E8E3E;
+    margin: 0;
+}
+
+.home-page-buttons {
+    width: 22rem;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    gap: 1rem;
+}
