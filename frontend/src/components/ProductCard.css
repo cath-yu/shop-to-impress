@@ -1,5 +1,5 @@
 .product-card {
-    height: 32rem;
+    height: 35rem;
     width: 27rem;
     display: flex;
     flex-direction: column;
@@ -25,23 +25,28 @@
     margin: 0;
 }
 
+.product-card-store {
+    width: 25rem;
+}
+
 .product-card-store h4 {
     width: 25rem;
     font-weight: 400;
     margin: 0;
 }
 
-.product-card-heart-right {
+.product-card-like {
     width: 25rem;
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
 }
 
-.product-card-heart-left {
-    width: 25rem;
-    display: flex;
-    justify-content: start;
+.product-card-dislike {
+    height: 2rem;
+    width: 2rem;
+    cursor: pointer;
 }
+
 
 .product-card-heart {
     height: 2rem;
