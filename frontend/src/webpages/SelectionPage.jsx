@@ -13,10 +13,10 @@ import Hanger from '../assets/hanger.png';
 export default function SelectionPage() {
     const navigate = useNavigate();
     const [selected, setSelected] = useState([]);
-    const tones = ["Warm", "Neutral", "Cool", "Pastel", "Bright"]
-    const palettes = ["Monochromatic", "Complementary", "Analagous", "Triadic"]
-    const seasons = ["Winter", "Spring", "Summer", "Fall"]
-    const themes = ["Casual", "Forest", "Streetwear", "Goth", "Academia"]
+    const tones = ["Warm", "Neutral", "Cool"]
+    const palettes = ["Monochromatic", "Complementary", "Analagous"]
+    // const seasons = ["Winter", "Spring", "Summer", "Fall"]
+    const themes = ["Casual", "Streetwear", "Academia"]
 
     useEffect(() => {
     const slideHanger = document.getElementById("hanger");
@@ -67,10 +67,10 @@ export default function SelectionPage() {
                         <CheckboxList data={palettes} selected={selected} onItemSelect={handleSelection}></CheckboxList>
                     </div>
 
-                    <div className="selection-page-options-list">
+                    {/* <div className="selection-page-options-list">
                         <p>Season</p>
                         <CheckboxList data={seasons} selected={selected} onItemSelect={handleSelection}></CheckboxList>
-                    </div>
+                    </div> */}
 
                     <div className="selection-page-options-list">
                         <p>Theme</p>
